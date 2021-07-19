@@ -41,7 +41,7 @@ function logout() {
 }
 
 function move_to_regist() {
-  document.location.href="/registration";
+  document.location.href="/regist.html";
 }
 
 function test_submit() {
