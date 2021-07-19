@@ -9,63 +9,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인 페이지</title>
     <link rel="stylesheet" href="static/resource/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="static/resource/js/main.js"></script>
     <script type="text/javascript">
-      var error= {{error}};
-      var cookie = String.fromCharCode({{cookie}});
-      var user= String.fromCharCode({{username}});
-      if (error==1) {
-        alert("존재하지 않는 아이디입니다.");
+      var server_error = {{error}};
+      if (server_error == 0) {
+        alert("가입이 완료되었습니다.\n로그인해주세요.");
+        location.href="/login";
       }
-      if (error==2) {
-        alert("비밀번호가 일치하지 않습니다.");
+      if (server_error == 1) {
+        alert("이메일 인증을 하신 후에 가입버튼을 눌러주세요.");
       }
-      if (error==3) {
-        Redirect_login(cookie, user);
+      if (server_error == 2) {
+        alert("페이지 변수를 함부로 건들지 말아주세요.");
+      }
+      if (server_error == 3) {
+        alert("이미 존재하는 아이디입니다.");
+      }
+      if (server_error == 4) {
+        alert("이메일 형식 오류입니다.");
       }
     </script>
 </head>
 <body>
+  <script type="text/javascript">
+    exist_profile_picture = false;
+    exist_username = false;
+    already_username = false;
+    exist_password = false;
+    match_password = false;
+    email_check_finished = false;
+  </script>
     <div id="container" class="main_container">
         <div style="padding: 20px;"></div>
-        <div class="login_container">
+        <div class="login_container" id="login_container" style="height: 900px;">
             <div class="form_container">
                 <form name="login_form" method="post">
                     <div class="form_title_div">
-                        <p class="form_title_p">로그인</p>
+                        <p class="form_title_p">회원가입</p>
+                    </div>
+                    <div>
+                      <div>
+                        <a class="form_item_name">프로필 사진</a>
+                      </div>
+                      <hr>
+                        <div id="regist_profile">
+                          <img id="regist_profile_img" style="float:left;" height="0" width="100">
+                          <input id="inp" type="file" accept="image/jpeg">
+                        </div>
+                        <div class="form_text_alert_padding"></div>
                     </div>
                     <div>
                         <div>
-                            <a class="form_item_name">username</a>
+                            <a class="form_item_name">사용자 이름</a>
                         </div>
+                        <hr>
                         <div>
-                            <input type="text" name="username" placeholder="name" class="form_input"/>
+                            <input type="text" id="regist_username" name="username" placeholder="name" class="form_input"/>
                         </div>
-                        <div class="form_text_alert_padding">
-                            <div id="alert_username" class="form_text_alert"></div>
+                        <div style="height: 10px;"></div>
+                        <div>
+                          <button type="button" id="username_check_button" name="button" onclick="username_check();">중복 확인</button>
                         </div>
+                        <div class="form_text_alert_padding"></div>
                     </div>
                     <div>
                         <div>
-                            <a class="form_item_name">Password</a>
+                            <a class="form_item_name">비밀번호</a>
+                        </div>
+                        <hr>
+                        <div>
+                            <input type="password" id="regist_password" name="password" placeholder="Enter password" class="form_input" />
+                        </div>
+                        <div style="padding-bottom:10px;"></div>
+                        <div>
+                            <a class="form_item_name">비밀번호 재확인</a>
                         </div>
                         <div>
-                            <input type="password" name="password" placeholder="Enter password" class="form_input" />
+                            <input type="password" id="password_check" name="password_check" placeholder="Enter password" class="form_input" />
                         </div>
-                        <div class="form_text_alert_padding">
-                            <div id="alert_password" class="form_text_alert"></div>
+                        <div class="form_text_alert_padding"></div>
+                    </div>
+                    <div>
+                        <div>
+                            <a class="form_item_name">이메일</a>
                         </div>
+                        <hr>
+                        <div>
+                            <input type="text" id="regist_email" name="email" placeholder="email" class="form_input"/>
+                        </div>
+                        <div style="height: 10px;"></div>
+                        <div>
+                            <button type="button" id="send_email" name="button" onclick="email_check();">이메일 인증</button>
+                            <input type="hidden" id="type_checker" name="checker" style="float:left;" placeholder="인증번호">
+                            <button type="button" id="send_checker" style="visibility: hidden;" name="button" onclick="sendchecker();">인증번호 확인</button>
+                        </div>
+                        <div class="form_text_alert_padding"></div>
+                    </div>
+                    <div>
+                        <div>
+                            <a class="form_item_name">나이</a>
+                        </div>
+                        <hr>
+                        <div>
+                            <input type="number" id="regist_age" name="age" placeholder="age" class="form_input"/>
+                        </div>
+                        <div class="form_text_alert_padding"></div>
+                    </div>
+                    <div>
+                        <div>
+                            <a class="form_item_name">소속</a>
+                        </div>
+                        <hr>
+                        <div>
+                            <input type="text" id="regist_affi" name="affi" placeholder="affiliation" class="form_input"/>
+                        </div>
+                        <div class="form_text_alert_padding"></div>
                     </div>
                     <div style="height: 10px;"></div>
                     <div>
-                      <input type="submit" class="form_submit_button" value="LOGIN">
+                        <input type="button" id="regist_button" style="background-color: #FF0000;" class="form_submit_button" value="회원가입" onclick="regist_error();">
                     </div>
-                    <div style="text-align:center;">
-                      <p>or</p>
-                    </div>
-                    <div>
-                      <input type="button" class="form_submit_button" onclick="move_to_regist();" value="REGISTRATION">
-                    </div>
+                    <script type="text/javascript">
+                      document.getElementById("inp").addEventListener("change", readFile);
+                      document.getElementById("regist_username").addEventListener("input", username_update);
+                      document.getElementById("regist_password").addEventListener("input", pw_update);
+                      document.getElementById("password_check").addEventListener("input", pw_check);
+                      document.getElementById("regist_email").addEventListener("input", email_change);
+                    </script>
                 </form>
             </div>
         </div>
