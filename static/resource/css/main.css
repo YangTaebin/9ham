@@ -1,0 +1,169 @@
+@font-face {
+  font-family: "font-main-1";
+  src: url("/static/resource/css/font/210 국민체조R.ttf") format("truetype");
+}
+
+.login-button {
+  color: white;
+  background-color: green;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-radius: 7px;
+  margin-right: 5%;
+}
+
+.logged-in {
+  padding-left: 7px;
+  padding-right: 7px;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.logout {
+  font-size: 20px;
+}
+/**
+ * author : velog.io/@___
+ * path : ./style.css
+ */
+
+.main_container{
+    border: 0px solid;
+}
+
+.login_container{
+    width: 380px;
+    height: 700px;
+    margin: auto;
+    border-radius: 3px;
+    box-shadow: 0px 0px 20px #000;
+}
+
+.form_container{
+    width: 300px;
+    margin: auto;
+}
+
+.form_title_div{
+    margin: auto;
+    text-align: center;
+}
+
+.form_title_p{
+    font-weight: bold;
+    font-size: 22px;
+    display: inline-block;
+    padding-top: 8px;
+}
+
+.form_input{
+    width: 98%;
+    height: 30px;
+    border: 1px solid;
+    border-radius: 3px;
+    border-color: gray;
+}
+
+.form_item_name{
+    color: gray;
+}
+
+.form_text_alert{
+    height: 20px;
+}
+
+.form_text_alert_padding{
+    padding-bottom: 30px;
+}
+
+.form_submit_button{
+    width: 100%;
+    height: 44px;
+    background-color: rgb(83, 154, 236);
+    border: 1px;
+    border-radius: 3px;
+    color: white;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.follow_menu {
+  width: 100%;
+  position: fixed;
+}
+
+.follow_menu ul li {
+  text-decoration: none;
+  list-style-type: none;
+}
+
+.follow_menu ul li a {
+  text-decoration: none;
+  list-style-type: none;
+  color: black;
+}
+
+.fixed-menu {
+  border-radius: 45px;
+  height: 320px;
+  width: 90px;
+  padding: 0px;
+  margin-right: 50px;
+  margin-top: 100px;
+  background-color: #9ed4bc;
+}
+
+.fixed-menu ul {
+  padding: 0px;
+  text-align: center;
+  margin: 0px;
+  padding-top: 20px;
+}
+
+.main_1 p {
+  font-family: "font-main-1";
+  font-size: 50px;
+  width: 500px;
+  height: 70px;
+}
+
+.main_1 {
+  margin-left: 10%;
+  margin-top: 100px;
+}
+
+.main_2 {
+  margin-left: 10%;
+  margin-top: 10px;
+}
+
+.main_2 img {
+  height: 400px;
+  width: 400px;
+}
+
+
+.main_top {
+  display: flex;
+  justify-content: center;
+}
+
+.main_bottom {
+  display: flex;
+  justify-content: center;
+}
+
+.main_3 {
+  margin-right: 100px;
+  margin-top: -200px;
+  float: left;
+}
+
+.main_3 p {
+  color: #0c7611;
+  font-family: "font-main-1";
+  font-size: 20px;
+  width: 400px;
+}

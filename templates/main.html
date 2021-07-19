@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>9 HAM</title>
+    <link rel="stylesheet" href="static/resource/css/bootstrap.css">
+    <link rel="stylesheet" href="static/resource/css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="static/resource/js/bootstrap.js"></script>
+    <script type="text/javascript" src="static/resource/js/main.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="border-bottom: 1px solid gray;">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <div class="blank" style="width:6%;"></div>
+        <a class="navbar-brand" href="/" style="font-size: 40px; color: #5f947a; font-family: impact;">GUHAM</a>
+        <div class="blank" style="width:10%;"></div>
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0" style="width:65%; font-size: 30px;">
+          <li class="nav-item" style="width:50%;">
+            <a class="nav-link" href="/matching">Matching</a>
+          </li>
+          <li class="nav-item" style="width:50%;">
+            <a class="nav-link" href="/qna">Q&A</a>
+          </li>
+          <li class="nav-item" style="width:50%;">
+            <a class="nav-link" href="/profile">Profile</a>
+          </li>
+          <li class="nav-item" style="width:50%;">
+            <a class="nav-link" href="/trend">Trend</a>
+          </li>
+        </ul>
+        <script type="text/javascript">
+          if(document.cookie.length > 0){
+            var username = getCookie("username");
+            var profile_button = document.createElement("a");
+            profile_button.setAttribute("class", "navbar-brand logged-in");
+            profile_button.setAttribute("href", "profile");
+            profile_button.innerHTML=username + " 님";
+            profile_button.style.color="green";
+            var logout_button = document.createElement("a");
+            logout_button.setAttribute("class", "navbar-brand logout");
+            logout_button.setAttribute("href", "/");
+            logout_button.setAttribute("onclick", "logout();");
+            logout_button.innerHTML="Logout";
+            var login_loc = document.getElementById("navbarTogglerDemo01");
+            login_loc.appendChild(profile_button);
+            login_loc.appendChild(logout_button);
+          }
+          else {
+            var login_button = document.createElement("a");
+            login_button.setAttribute("class", "navbar-brand login-button");
+            login_button.setAttribute("href", "login");
+            login_button.innerHTML="LOGIN/REGIST";
+            login_button.style.color="white";
+            var login_loc = document.getElementById("navbarTogglerDemo01");
+            login_loc.appendChild(login_button);
+          }
+        </script>
+      </div>
+    </nav>
+    <div class="follow_menu" align="right">
+      <div class="fixed-menu">
+        <ul>
+          <li class="matching">
+            <a href="/matching">
+              <img src="/static/resource/img/check.png" alt="" style="width: 40px; height: 40px;">
+            </a>
+          </li>
+          <li>
+            <a href="/matching">
+              Matching
+            </a>
+          </li>
+          <li style="height: 10px;"></li>
+          <li class="qna">
+            <a href="/qna">
+              <img src="/static/resource/img/qna.png" alt="" style="width: 40px; height: 40px;">
+            </a>
+          </li>
+          <li>
+            <a href="/qna">
+              Q&A
+            </a>
+          </li>
+          <li style="height: 10px;"></li>
+          <li class="profile">
+            <a href="/profile">
+              <img src="/static/resource/img/profile.png" alt="" style="width: 40px; height: 40px;">
+            </a>
+          </li>
+          <li>
+            <a href="/profile">
+              Profile
+            </a>
+          </li>
+          <li style="height: 10px;"></li>
+          <li class="top">
+            <a onclick="window.scrollTo(0,0);">
+              <img src="/static/resource/img/top.png" alt="" style="width: 40px; height: 40px;">
+            </a>
+          </li>
+          <li>
+            <a onclick="window.scrollTo(0,0);">
+              TOP
+            </a>
+          </li>
+          <li style="height: 10px;"></li>
+        </ul>
+      </div>
+    </div>
+    <div class="main">
+      <div class="main_top" id="main_top">
+        <div class="main_1" style="float:left;">
+          <p>든든한 팀원 모집, 구함</p>
+        </div>
+        <div class="main_2">
+          <img src="/static/resource/img/two_thumb.png" alt="">
+        </div>
+      </div>
+      <div class="main_bottom">
+        <div id="main_3" class="main_3">
+          <p>구함 사이트 한줄 소개글 적어주실 분 구함</p>
+        </div>
+        <div style="width: 21%;">
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      window.onload = function() {
+        window.addEventListener('resize', function() {
+          resi();
+        });
+      }
+    </script>
+  </body>
+</html>
