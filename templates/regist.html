@@ -29,6 +29,9 @@
       if (server_error == 4) {
         alert("이메일 형식 오류입니다.");
       }
+      if (server_error == 5) {
+        alert("프로필 사진에는 jpg와 png 파일만 사용해주세요.");
+      }
     </script>
 </head>
 <body>
@@ -55,7 +58,7 @@
                       <hr>
                         <div id="regist_profile">
                           <img id="regist_profile_img" style="float:left;" height="0" width="100">
-                          <input id="inp" type="file" accept="image/jpeg">
+                          <input id="inp" type="file" accept="image/jpeg, image/png">
                         </div>
                         <div class="form_text_alert_padding"></div>
                     </div>

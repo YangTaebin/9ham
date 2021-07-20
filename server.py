@@ -35,7 +35,7 @@ def email_check(email):
     for j in email.split("@")[1]:
         if j == ".":
             count += 1
-    if count != 1:
+    if count > 2:
         return False
 
     if email.split("@")[1] in ban_list:
@@ -162,6 +162,7 @@ def regist_post_data():
         return render_template("regist.html", error=error)
 
     profile_img = str(request.form["profile_img"])
+    profile_img_filename = str(request.form["profile_img_filename"])
     username = str(request.form["username"])
     password = str(request.form["password"])
     email = str(request.form["email"])
@@ -198,8 +199,14 @@ def regist_post_data():
     password = hashlib.sha256(password.encode()).hexdigest()
     password = hashlib.sha256(password.encode()).hexdigest()
 
+    if profile_img_filename.split(".")[1] == "jpg":
+        filename = "static/profile_img/profile_"+username+".jpg"
+    elif profile_img_filename.split(".")[1] == "png":
+        filename = "static/profile_img/profile_" + username + ".png"
+    else:
+        error = 5
+        return render_template("regist.html", error=error)
     imgdata = base64.b64decode(profile_img)
-    filename = "static/profile_img/profile_"+username+".jpg"
     with open(filename, 'wb') as f:
         f.write(imgdata)
 
@@ -288,6 +295,10 @@ def auth_username():
             return json.dumps({"error": 0, "username": i["username"]})
 
     return json.dumps({"error": 1})
+
+@app.route("/recruit")
+def recruit():
+    return render_template("recruit.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

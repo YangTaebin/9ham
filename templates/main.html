@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>9 HAM</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="static/resource/css/bootstrap.css">
     <link rel="stylesheet" href="static/resource/css/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -123,17 +124,59 @@
       <div class="main_bottom">
         <div id="main_3" class="main_3">
           <p>구함 사이트 한줄 소개글 적어주실 분 구함</p>
+          <div class="main_buttons">
+            <button type="button" id="main_button" name="button" onclick="matching_redirect();">MATCHING</button>
+            <div style="height: 10px;"></div>
+            <button type="button" id="main_button" name="button" onclick="qna_redirect();">Q&A</button>
+          </div>
         </div>
         <div style="width: 21%;">
         </div>
       </div>
     </div>
+    <div style="margin-bottom: -70px;">
+      <img src="/static/resource/img/ship.gif" style="width: 2700px;" alt="">
+    </div>
+    <div class="main_wave_img" border: 0px;>
+      <img src="/static/resource/img/wave.png" alt="">
+    </div>
+    <div style="height: 30px;"></div>
+    <div class="swiper-container mySwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <img src="/static/resource/img/banner_1.jpg" alt="">
+        </div>
+        <div class="swiper-slide">
+          <img src="/static/resource/img/banner_2.jpg" alt="">
+        </div>
+        <div class="swiper-slide">
+          <img src="/static/resource/img/banner_3.jpg" alt="">
+        </div>
+        <div class="swiper-slide">
+          <img src="/static/resource/img/banner_4.jpg" alt="">
+        </div>
+        <div class="swiper-slide">
+          <img src="/static/resource/img/banner_5.jpg" alt="">
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script type="text/javascript">
       window.onload = function() {
         window.addEventListener('resize', function() {
           resi();
         });
       }
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: "auto",
+        centeredSlides: true,
+        spaceBetween: 30,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+      });
     </script>
   </body>
 </html>

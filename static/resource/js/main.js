@@ -1,12 +1,12 @@
 function resi() {
-  var limit = 1100;
+  var limit = 990;
   console.log(window.innerWidth);
   if (window.innerWidth < limit) {
     document.getElementById("main_top").setAttribute("style", "display: block;");
     document.getElementById("main_3").setAttribute("style", "margin-top: 0px;");
   } else {
     document.getElementById("main_top").setAttribute("style", "display: flex;");
-    document.getElementById("main_3").setAttribute("style", "margin-top: -200px;");
+    document.getElementById("main_3").setAttribute("style", "margin-top: -260px;");
   }
 }
 
@@ -79,13 +79,26 @@ function readFile() {
       document.getElementById("login_container").setAttribute("style", "height: 1000px;")
       document.getElementById("regist_profile_img").src = e.target.result;
       document.getElementById("regist_profile_img").height = "100";
+      var filename = document.getElementById("inp").files[0].name;
       var bas = (e.target.result).toString();
-      var only_bas = bas.split('data:image/jpeg;base64,')[1];
+      if (filename.split(".")[1] == "jpg"){
+        var only_bas = bas.split('data:image/jpeg;base64,')[1];
+      } else if (filename.split(".")[1] == "png"){
+        var only_bas = bas.split('data:image/png;base64,')[1];
+      } else {
+        alert("파일은 jpg, png 만 사용해주세요.");
+        return
+      }
       var input_base64 = document.createElement('input');
       input_base64.setAttribute("name", "profile_img");
       input_base64.setAttribute("type", "hidden");
       input_base64.setAttribute("value", only_bas);
+      var input_base64_name = document.createElement('input');
+      input_base64_name.setAttribute("name", "profile_img_filename");
+      input_base64_name.setAttribute("type", "hidden");
+      input_base64_name.setAttribute("value", filename);
       document.getElementById("regist_profile").appendChild(input_base64);
+      document.getElementById("regist_profile").appendChild(input_base64_name);
       exist_profile_picture = true;
       test_submit();
     });
@@ -291,4 +304,13 @@ function email_change() {
   send_button.setAttribute("style", "padding-left: 10px;padding-right: 10px;padding-up: 10px;padding-buttom: 10px;")
   send_checker.style.visibility = "hidden";
   type_checker.setAttribute("type", "hidden");
+}
+
+function matching_redirect() {
+  document.location.href = "/matching";
+}
+
+
+function qna_redirect() {
+  document.location.href = "/qna";
 }
