@@ -76,7 +76,7 @@ function readFile() {
   if (this.files && this.files[0]) {
     var FR= new FileReader();
     FR.addEventListener("load", function(e) {
-      document.getElementById("login_container").setAttribute("style", "height: 1000px;")
+      document.getElementById("login_container").setAttribute("style", "height: 1070px;")
       document.getElementById("regist_profile_img").src = e.target.result;
       document.getElementById("regist_profile_img").height = "100";
       var filename = document.getElementById("inp").files[0].name;
@@ -313,4 +313,55 @@ function matching_redirect() {
 
 function qna_redirect() {
   document.location.href = "/qna";
+}
+
+var Request = function() {
+  this.getParameter = function(name) {
+    var rtnval = '';
+    var nowAddress = unescape(location.href);
+    var parameters = (nowAddress.slice(nowAddress.indexOf('?') + 1,nowAddress.length)).split('&');
+    for (var i = 0; i < parameters.length; i++) {
+      var varName = parameters[i].split('=')[0];
+      if (varName.toUpperCase() == name.toUpperCase()) {
+        rtnval = parameters[i].split('=')[1];
+        break;
+      }
+    }
+    return rtnval;
+  }
+}
+
+function change_profile() {
+  document.location.href = "/change_profile";
+}
+
+function tag_change() {
+  document.location.href = "/tag_change";
+}
+
+function add_tag() {
+  place = document.getElementById("tags");
+  var space = document.createElement("br");
+  var new_select = document.createElement("select");
+  var num = document.getElementsByClassName("selects").length;
+  new_select.add(new Option("3D 모델링","3d modeling"));
+  new_select.add(new Option("모션그래픽","motiongraphic"));
+  new_select.add(new Option("포토그래픽","photographic"));
+  new_select.add(new Option("디자이너","design"));
+  new_select.add(new Option("기획","planning"));
+  new_select.add(new Option("마케팅","marketing"));
+  new_select.add(new Option("영상 편집","video editing"));
+  space.setAttribute("id","select_"+num);
+  new_select.setAttribute("id","select_"+num+"_tags");
+  new_select.setAttribute("name","select_"+num+"_tags");
+  new_select.setAttribute("class","selects");
+  new_select.setAttribute("style","margin-top: 5px;");
+  place.appendChild(space);
+  place.appendChild(new_select);
+}
+
+function remove_tag() {
+  var num = document.getElementsByClassName("selects").length;
+  document.getElementById("select_"+(num-1)).remove();
+  document.getElementById("select_"+(num-1)+"_tags").remove();
 }

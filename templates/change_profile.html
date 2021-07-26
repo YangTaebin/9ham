@@ -9,9 +9,26 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="static/resource/js/bootstrap.js"></script>
     <script type="text/javascript" src="static/resource/js/main.js"></script>
+    <script type="text/javascript">
+      var error = {{ error }};
+      var username = getCookie("username");
+      if (error == 0) {
+        alert("변경되었습니다.");
+        document.location.href="/profile?username="+username;
+      }
+      if (error == 1) {
+        alert("존재하지 않는 아이디입니다.");
+      }
+      if (error == 2) {
+        alert("옳지 않은 비밀번호입니다.");
+      }
+      if (error == 3) {
+        alert("매치되지 않는 이메일입니다.");
+      }
+    </script>
   </head>
   <body style="background-color: #f4f4f4;">
-    <nav class="navbar navbar-expand-lg navbar-light" style="border-bottom: 1px solid gray;">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #FFFFFF;">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -27,7 +44,7 @@
             <a class="nav-link" href="/qna">Q&A</a>
           </li>
           <li class="nav-item" style="width:50%;">
-            <a class="nav-link" id="profile" href="/profile">Profile</a>
+            <a class="nav-link" href="/profile">Profile</a>
           </li>
           <li class="nav-item" style="width:50%;">
             <a class="nav-link" href="/trend">Trend</a>
@@ -37,7 +54,6 @@
           if(document.cookie.length > 0){
             var username = getCookie("username");
             var profile_button = document.createElement("a");
-            document.getElementById("profile").href="/profile?username="+username;
             profile_button.setAttribute("class", "navbar-brand logged-in");
             profile_button.setAttribute("href", "/profile?username="+username);
             profile_button.innerHTML=username + " 님";
@@ -70,24 +86,44 @@
           <h1 style="font-family: 'font-main-1';">Profile</h1>
         </div>
         <div class="profile_main">
-          <img id="profile_image" src="" style="width: 170px; height: 170px; border-radius: 70%; overflow: hidden;">
-          <p id="profile_username" style="font-size: 25px; font-family: 'font-main-1'; margin-top: 50px; margin-bottom: 0px;"></p>
-          <p id="profile_passwd" style="font-size: 25px; font-family: 'font-main-1'; margin-top: 7px; margin-bottom: 0px;"></p>
-          <p id="profile_age" style="font-size: 25px; font-family: 'font-main-1'; margin-top: 7px; margin-bottom: 0px;"></p>
-          <p id="profile_affi" style="font-size: 25px; font-family: 'font-main-1'; margin-top: 7px; margin-bottom: 0px;"></p>
-          <p id="profile_email" style="font-size: 25px; font-family: 'font-main-1'; margin-top: 7px; margin-bottom: 0px;"></p>
-          <p id="profile_lane" style="font-size: 25px; font-family: 'font-main-1'; margin-top: 7px; margin-bottom: 0px;"></p>
-          <p id="profile_tags" style="font-size: 25px; font-family: 'font-main-1'; margin-top: 7px; margin-bottom: 0px;"></p>
-          <button type="button" class="change_profile_button" onclick="change_profile();" style="float: right;">프로필 변경</button>
+          <form action="/change_profile" method="post">
+            <img id="profile_image" src="" style="width: 170px; height: 170px; border-radius: 70%; overflow: hidden;">
+            <br>
+            <div style="height: 10px;"></div>
+            <p style="display: inline; font-family: 'font-main-1'; font-size: 20px;">닉네임: </p><input type="text" id="profile_username" name="profile_username" style="font-size: 15px; font-family: '돋움'; margin-top: 50px; margin-bottom: 0px; border-radius: 10px; padding: 5px; border: 0.5px solid black;" readonly=True>
+            <br>
+            <div style="height: 10px;"></div>
+            <p style="display: inline; font-family: 'font-main-1'; font-size: 20px;">비밀번호: </p><input type="password" id="profile_passwd" name="profile_passwd" style="font-size: 15px; font-family: '돋움'; margin-top: 7px; margin-bottom: 0px; border-radius: 10px; padding: 5px; border: 0.5px solid black;">
+            <br>
+            <div style="height: 10px;"></div>
+            <p style="display: inline; font-family: 'font-main-1'; font-size: 20px;">나이: </p><input type="text" id="profile_age" name="profile_age" style="font-size: 15px; font-family: '돋움'; margin-top: 7px; margin-bottom: 0px; border-radius: 10px; padding: 5px; border: 0.5px solid black;">
+            <br>
+            <div style="height: 10px;"></div>
+            <p style="display: inline; font-family: 'font-main-1'; font-size: 20px;">소속: </p><input type="text" id="profile_affi" name="profile_affi" style="font-size: 15px; font-family: '돋움'; margin-top: 7px; margin-bottom: 0px; border-radius: 10px; padding: 5px; border: 0.5px solid black;">
+            <br>
+            <div style="height: 10px;"></div>
+            <p style="display: inline; font-family: 'font-main-1'; font-size: 20px;">이메일: </p><input type="text" id="profile_email" name="profile_email" style="font-size: 15px; font-family: '돋움'; margin-top: 7px; margin-bottom: 0px; border-radius: 10px; padding: 5px; border: 0.5px solid black;" readonly=True>
+            <br>
+            <div style="height: 17px;"></div>
+            <p style="display: inline; font-family: 'font-main-1'; font-size: 20px;">주 역할: </p>
+            <select class="profile_lane" name="profile_lane">
+              <option value="idea">아이디어/기획자</option>
+              <option value="design">디자이너</option>
+              <option value="develop">기술자</option>
+            </select>
+            <p id="profile_tags" style="font-size: 25px; font-family: 'font-main-1'; margin-top: 7px; margin-bottom: 0px;"></p>
+            <input type="submit" class="profile_change_submit" value="변경 완료" style="float: right;">
+          </form>
+          <button type="button" name="button" class="tag_change_button" onclick="tag_change();" style="float: right; margin-right: 10px;">카테고리 변경</button>
         </div>
       </div>
     </div>
     <script type="text/javascript">
     if(document.cookie.length > 0){
       var request = new Request();
-      var username = request.getParameter("username")
-      document.getElementById("profile_username").innerHTML = "닉네임(아이디): "+username;
-      document.getElementById("profile_passwd").innerHTML = "비밀번호: ******";
+      var username = getCookie("username");
+      document.getElementById("profile_username").value = username;
+      document.getElementById("profile_passwd").placeholder = "******";
       $.ajax({
         type: "POST",
         url: "/profile_img_type",
@@ -118,8 +154,8 @@
           affi = data["affi"]
           lane = data["lane"]
           tags = data["tags"]
-          real_tags = []
           len = tags.length;
+          real_tags = [];
           tag_dictioinary = {"3d modeling":"3D 모델링","motiongraphic":"모션그래픽","photographic":"포토그래픽","design":"디자인","planning":"계획","marketing":"마케팅","video editing":"영상 편집"}
           for(var i=0; i<len; i++){
             if (tags[i] in tag_dictioinary) {
@@ -128,18 +164,17 @@
           }
           tags = real_tags;
           tags = tags.join(";;");
+          tag_text = tags;
           if (tags=="") {
-            console.log("없음");
             tags = "<p style='color:red;'>선택하신 카테고리가 없습니다.</p>";
           } else {
             tags = tags.split(";;");
             tags = tags.join("</p> <p style='border-radius: 20px; width: 200px; text-align: center; float: left; margin-right: 10px; margin-top: 3px; background-color: #589a76; color: white; font-size: 20px; padding: 3px;'>");
             tags = "<p style='border-radius: 20px; width: 200px; text-align: center; margin-right: 50px; margin-top: 3px; background-color: #589a76; color: white; font-size: 20px; padding: 3px;'>"+tags+"</p>";
           }
-          document.getElementById("profile_email").innerHTML = "이메일: "+email;
-          document.getElementById("profile_age").innerHTML = "나이: "+age;
-          document.getElementById("profile_affi").innerHTML = "소속: "+affi;
-          document.getElementById("profile_lane").innerHTML = "주 역할: "+lane;
+          document.getElementById("profile_email").value = email;
+          document.getElementById("profile_age").value = age;
+          document.getElementById("profile_affi").value = affi;
           document.getElementById("profile_tags").innerHTML = "관심 카테고리: "+tags;
         },
         error: function(errMsg) {

@@ -5,6 +5,7 @@ import base64
 import random
 import smtplib
 from email.mime.text import MIMEText
+import os.path
 
 app = Flask(__name__)
 
@@ -81,6 +82,28 @@ def check_checker(email, checker):
     db_checker = checker_check_cursor.fetchall()[0]["email_check"]
     return(db_checker == checker)
 
+def get_tag_username(username):
+    checker = pymysql.connect(user="root", passwd="@dkfldkfl2021@", database="9ham_login")
+    checker_cursor = checker.cursor(pymysql.cursors.DictCursor)
+    sql = "select email_check from user_info where username='"+str(username)+"';"
+    checker_cursor.execute(sql)
+    check_code = str(checker_cursor.fetchall()[0]["email_check"])
+    tag = pymysql.connect(user="root", passwd="@dkfldkfl2021@", database="9ham_user_tags")
+    tag_cursor = tag.cursor(pymysql.cursors.DictCursor)
+    sql="select tags from user_tags where checker='"+str(check_code)+"';"
+    tag_cursor.execute(sql)
+    tags = str(tag_cursor.fetchall()[0]["tags"])
+    tags = tags.split(";;")
+    return tags
+
+def getchecker_username(username):
+    checker = pymysql.connect(user="root", passwd="@dkfldkfl2021@", database="9ham_login")
+    checker_cursor = checker.cursor(pymysql.cursors.DictCursor)
+    sql = "select email_check from user_info where username='" + str(username) + "';"
+    checker_cursor.execute(sql)
+    check_code = str(checker_cursor.fetchall()[0]["email_check"])
+    return check_code
+
 @app.route("/")
 def main():
     return render_template("main.html")
@@ -92,6 +115,91 @@ def login():
 @app.route("/profile")
 def profile():
     return render_template("profile.html")
+
+@app.route("/change_profile")
+def change_profile():
+    return render_template("change_profile.html", error=5)
+
+@app.route("/change_profile", methods=["POST"])
+def change_profile_submit():
+    username = request.form["profile_username"]
+    passwd = request.form["profile_passwd"]
+    age = request.form["profile_age"]
+    affi = request.form["profile_affi"]
+    lane = request.form["profile_lane"]
+    email = request.form["profile_email"]
+    ham = pymysql.connect(user="root", passwd="@dkfldkfl2021@", database="9ham_login")
+    ham_cursor = ham.cursor(pymysql.cursors.DictCursor)
+    sql = "select exists (select * from user_info where username='"+username+"') as success;"
+    ham_cursor.execute(sql)
+    exists = ham_cursor.fetchall()[0]["success"]
+    if exists != 1:
+        return render_template("change_profile.html", error=1)
+
+    sql="select * from user_info where username='"+str(username)+"';"
+    ham_cursor.execute(sql)
+    user_data = ham_cursor.fetchall()[0]
+
+    N = 2
+    for i in range(N):
+        passwd = hashlib.sha256(passwd.encode()).hexdigest()
+
+    if passwd != user_data["password"]:
+        return render_template("change_profile.html", error=2)
+    if email != user_data["email"]:
+        return render_template("change_profile.html", error=3)
+
+    sql = "update user_info set age="+str(age)+", affi='"+str(affi)+"' where username='"+str(username)+"';"
+    ham_cursor.execute(sql)
+    ham.commit()
+    return render_template("change_profile.html", error=0)
+
+@app.route("/tag_change")
+def tag_change():
+    return render_template("tag_change.html", error=5)
+
+@app.route("/tag_change", methods=["POST"])
+def tag_change_submit():
+    username = request.form["profile_username"]
+    passwd = request.form["profile_passwd"]
+    tags = []
+    num = 0
+    while True:
+        if "select_"+str(num)+"_tags" in request.form.keys():
+            tags.append(request.form["select_"+str(num)+"_tags"])
+        else: break
+        num += 1
+    real_tags = []
+    for i in tags:
+        if i not in real_tags:
+            real_tags.append(i)
+    tags = real_tags
+    if len(tags) > 10:
+        return render_template("tag_change.html", error=1)
+    tags = ";;".join(tags)
+    print(tags)
+    ham = pymysql.connect(user="root", passwd="@dkfldkfl2021@", database="9ham_login")
+    ham_cursor = ham.cursor(pymysql.cursors.DictCursor)
+    sql = "select password from user_info where username='"+str(username)+"';"
+    ham_cursor.execute(sql)
+    passcode = ham_cursor.fetchall()[0]["password"]
+    N = 2
+    for i in range(N):
+        passwd = hashlib.sha256(passwd.encode()).hexdigest()
+    if passwd != passcode:
+        return render_template("tag_change.html", error=2)
+
+    sql = "select email_check from user_info where username='"+str(username)+"';"
+    ham_cursor.execute(sql)
+    checker = ham_cursor.fetchall()[0]["email_check"]
+
+    hem = pymysql.connect(user="root", passwd="@dkfldkfl2021@", database="9ham_user_tags")
+    hem_cursor = hem.cursor(pymysql.cursors.DictCursor)
+    sql = "update user_tags set tags='"+str(tags)+"' where checker='"+str(checker)+"';"
+    hem_cursor.execute(sql)
+    hem.commit()
+
+    return render_template("tag_change.html", error=0)
 
 @app.route("/login", methods=["POST"])
 def login_process():
@@ -166,6 +274,15 @@ def regist_post_data():
     username = str(request.form["username"])
     password = str(request.form["password"])
     email = str(request.form["email"])
+    lane = str(request.form["select_lane"])
+
+    if lane == "idea":
+        lane = 0
+    elif lane == "design":
+        lane = 1
+    elif lane == "develop":
+        lane = 2
+
     age = "0"
     affi = ""
 
@@ -213,9 +330,18 @@ def regist_post_data():
     db_user_info = pymysql.connect(user="root", passwd="@dkfldkfl2021@", database="9ham_login")
     db_user_info_cursor = db_user_info.cursor(pymysql.cursors.DictCursor)
 
-    sql = "update user_info set username='"+str(username)+"', password='"+str(password)+"', age="+str(age)+", affi='"+str(affi)+"' where email='"+str(email)+"';"
+    sql = "update user_info set username='"+str(username)+"', password='"+str(password)+"', lane="+str(lane)+", age="+str(age)+", affi='"+str(affi)+"' where email='"+str(email)+"';"
     db_user_info_cursor.execute(sql)
     db_user_info.commit()
+
+    checker = getchecker_username(username)
+
+    tags = pymysql.connect(user="root", passwd="@dkfldkfl2021@", database="9ham_user_tags")
+    tags_cursor = tags.cursor(pymysql.cursors.DictCursor)
+
+    sql = "insert into user_tags (checker, tags) values ('"+str(checker)+"','')"
+    tags_cursor.execute(sql)
+    tags.commit()
 
     return render_template("regist.html", error=error)
 
@@ -299,6 +425,52 @@ def auth_username():
 @app.route("/recruit")
 def recruit():
     return render_template("recruit.html")
+
+@app.route("/matching")
+def matching_show():
+    return render_template("matching.html")
+
+@app.route("/recommend_list", methods=["POST"])
+def recommend_list():
+    username = request.get_json()["username"]
+    print(username)
+    tags = get_tag_username(username)
+    return json.dumps({"status": "success", "tags":tags})
+
+@app.route("/profile_img_type", methods=["POST"])
+def profile_type():
+    username = request.get_json()["username"]
+    file = "C:/Users/ksaya/OneDrive/바탕 화면/학교/연구회 활동/아리아리/9ham/static/profile_img/profile_"+username+".jpg"
+    if os.path.exists(file):
+        return json.dumps({"status": "success", "image_type":"jpg"})
+    file = "/static/profile_img/profile_"+username+".png"
+    if os.path.exists(file):
+        return json.dumps({"status": "success", "image_type":"png"})
+    else:
+        return json.dumps({"status": "failed"})
+
+@app.route("/username_profile", methods=["POST"])
+def user_prof():
+    lane_n_t = {2:"개발자", 1:"디자이너", 0:"기획/아이디어 담당자"}
+    username = request.get_json()["username"]
+    user_info = pymysql.connect(user="root", passwd="@dkfldkfl2021@", database="9ham_login")
+    user_info_cursor = user_info.cursor(pymysql.cursors.DictCursor)
+    sql = "select * from user_info where username='"+str(username)+"';"
+    user_info_cursor.execute(sql)
+    user_data = user_info_cursor.fetchall()[0]
+    email = user_data["email"]
+    age = user_data["age"]
+    affi = user_data["affi"]
+    lane = user_data["lane"]
+    lane = lane_n_t[lane]
+    checker = user_data["email_check"]
+    user_tag = pymysql.connect(user="root", passwd="@dkfldkfl2021@", database="9ham_user_tags")
+    user_tag_cursor = user_tag.cursor(pymysql.cursors.DictCursor)
+    sql = "select * from user_tags where checker='" + str(checker) + "';"
+    user_tag_cursor.execute(sql)
+    user_tags = user_tag_cursor.fetchall()[0]["tags"].split(";;")
+
+    return json.dumps({"status":"success","email":email,"age":age,"affi":affi,"lane":lane,"tags":user_tags})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

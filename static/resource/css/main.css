@@ -229,3 +229,49 @@ body {
 .swiper-slide {
   width: 30%;
 }
+
+.profile_change_submit {
+  background: lightgray;
+  width: 100px;
+  height: 40px;
+  font-family: "font-main-1";
+  font-size: 20px;
+}
+
+.profile_lane {
+  width: 300px;
+  height: 30px;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.change_profile_button {
+  font-family: "font-main-1";
+  font-size: 20px;
+  background-color: lightgray;
+  width: 130px;
+  height: 40px;
+  border: 1px solid black;
+}
+
+.tag_change_button {
+  background: lightgray;
+  width: 150px;
+  height: 40px;
+  font-family: "font-main-1";
+  font-size: 20px;
+}
+
+.change_tag_submit {
+  font-family: "font-main-1";
+  font-size: 20px;
+  background-color: lightgray;
+  width: 130px;
+  height: 40px;
+  border: 1px solid black;
+  float: right;
+}
+
+.matching-table td {
+  border: 1px solid black;
+}

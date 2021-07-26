@@ -45,7 +45,7 @@
   </script>
     <div id="container" class="main_container">
         <div style="padding: 20px;"></div>
-        <div class="login_container" id="login_container" style="height: 900px;">
+        <div class="login_container" id="login_container" style="height: 970px;">
             <div class="form_container">
                 <form name="login_form" method="post">
                     <div class="form_title_div">
@@ -106,6 +106,20 @@
                             <button type="button" id="send_email" name="button" onclick="email_check();">이메일 인증</button>
                             <input type="hidden" id="type_checker" name="checker" style="float:left;" placeholder="인증번호">
                             <button type="button" id="send_checker" style="visibility: hidden;" name="button" onclick="sendchecker();">인증번호 확인</button>
+                        </div>
+                        <div class="form_text_alert_padding"></div>
+                    </div>
+                    <div>
+                        <div>
+                            <a class="form_item_name">선호하는 역할</a>
+                        </div>
+                        <hr>
+                        <div>
+                            <select class="select_lane" name="select_lane">
+                              <option value="idea">아이디어/기획자</option>
+                              <option value="design">디자이너</option>
+                              <option value="develop">기술자</option>
+                            </select>
                         </div>
                         <div class="form_text_alert_padding"></div>
                     </div>
